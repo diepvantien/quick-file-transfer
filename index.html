@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick File Transfer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📁 Quick File Transfer</h1>
+            <p>Fast and secure file sharing</p>
+        </header>
+
+        <main>
+            <div class="transfer-section">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📤</div>
+                    <h3>Drop files here or click to upload</h3>
+                    <p>Select files to share with others</p>
+                    <input type="file" id="fileInput" multiple accept="*/*" style="display: none;">
+                    <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                        Choose Files
+                    </button>
+                </div>
+
+                <div class="progress-area" id="progressArea" style="display: none;">
+                    <div class="progress-info">
+                        <span id="fileName">Transferring...</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="transfer-info">
+                        <span id="transferSpeed">0 KB/s</span>
+                        <span id="timeRemaining">--:--</span>
+                    </div>
+                </div>
+
+                <div class="files-list" id="filesList" style="display: none;">
+                    <h3>Selected Files</h3>
+                    <div id="filesContainer"></div>
+                </div>
+            </div>
+
+            <div class="connection-section">
+                <div class="connection-info">
+                    <h3>🔗 Share Files</h3>
+                    <div class="connection-methods">
+                        <button class="method-btn" id="generateLinkBtn">Generate Share Link</button>
+                        <button class="method-btn" id="qrCodeBtn">Show QR Code</button>
+                    </div>
+                    <div class="share-link" id="shareLink" style="display: none;">
+                        <input type="text" id="linkInput" readonly>
+                        <button onclick="copyLink()">Copy</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Performance Stats Mini Dashboard -->
+    <div class="stats-dashboard" id="statsDashboard">
+        <div class="stats-header" onclick="toggleStats()">
+            <span class="stats-icon">📊</span>
+            <span class="stats-title">Stats</span>
+            <span class="stats-toggle" id="statsToggle">−</span>
+        </div>
+        <div class="stats-content" id="statsContent">
+            <div class="stat-item">
+                <span class="stat-label">Speed:</span>
+                <span class="stat-value" id="currentSpeed">0 KB/s</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">📤 Sent:</span>
+                <span class="stat-value" id="totalSent">0 B</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">📥 Received:</span>
+                <span class="stat-value" id="totalReceived">0 B</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">📁 Files:</span>
+                <span class="stat-value" id="filesCount">0</span>
+            </div>
+            <div class="stats-actions">
+                <button class="stats-btn" onclick="resetStats()">Reset</button>
+                <button class="stats-btn" onclick="hideStats()">Hide</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
