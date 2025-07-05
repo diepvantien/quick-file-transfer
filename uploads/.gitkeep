@@ -1,0 +1,5 @@
+# Uploads Directory
+
+This directory stores temporary uploaded files. Files are automatically cleaned up after 30 minutes.
+
+Do not commit actual uploaded files to the repository.

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick File Transfer</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="logo">
+                <span class="material-icons">flash_on</span>
+                Quick File Transfer
+            </h1>
+            <p class="subtitle">Share files instantly with QR codes</p>
+        </header>
+
+        <div class="main-card">
+            <div class="option-grid">
+                <div class="option-card send-option" id="sendOption">
+                    <div class="option-icon">
+                        <span class="material-icons">cloud_upload</span>
+                    </div>
+                    <h3>Send Files</h3>
+                    <p>Upload files and generate QR code for sharing</p>
+                </div>
+
+                <div class="option-card receive-option" id="receiveOption">
+                    <div class="option-icon">
+                        <span class="material-icons">cloud_download</span>
+                    </div>
+                    <h3>Receive Files</h3>
+                    <p>Scan QR code or enter room code to download files</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-mini" id="statsMini">
+            <div class="stats-toggle" id="statsToggle">
+                <span class="material-icons">analytics</span>
+                <span>Stats</span>
+            </div>
+            <div class="stats-content" id="statsContent">
+                <div class="stat-item">
+                    <span class="stat-label">Total Sent</span>
+                    <span class="stat-value" id="totalSent">0 MB</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Total Received</span>
+                    <span class="stat-value" id="totalReceived">0 MB</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Files Transferred</span>
+                    <span class="stat-value" id="filesTransferred">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Best Speed</span>
+                    <span class="stat-value" id="bestSpeed">0 KB/s</span>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>&copy; 2024 Quick File Transfer. Built with ❤️ for fast file sharing.</p>
+        </footer>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/stats.js"></script>
+    <script>
+        function goToSender() {
+            window.location.href = '/sender';
+        }
+
+        function goToReceiver() {
+            window.location.href = '/receiver';
+        }
+
+        function toggleStats() {
+            const statsContent = document.getElementById('statsContent');
+            const statsMini = document.getElementById('statsMini');
+            
+            if (statsContent.style.display === 'none' || !statsContent.style.display) {
+                statsContent.style.display = 'grid';
+                statsMini.classList.add('expanded');
+            } else {
+                statsContent.style.display = 'none';
+                statsMini.classList.remove('expanded');
+            }
+        }
+
+        // Initialize stats display
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add event listeners
+            document.getElementById('sendOption').addEventListener('click', goToSender);
+            document.getElementById('receiveOption').addEventListener('click', goToReceiver);
+            document.getElementById('statsToggle').addEventListener('click', toggleStats);
+            
+            updateStatsDisplay();
+        });
+    </script>
+</body>
+</html>
