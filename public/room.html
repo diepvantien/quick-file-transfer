@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phòng chuyển file - Quick File Transfer</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-share-alt"></i> Quick File Transfer</h1>
+            <p>Phòng chuyển file với WebRTC P2P</p>
+        </div>
+
+        <div class="connection-status" id="connectionStatus">
+            <i class="fas fa-circle-notch fa-spin"></i>
+            <span>Đang kết nối...</span>
+        </div>
+
+        <div class="main-content">
+            <div class="section">
+                <div class="room-info" id="roomInfo">
+                    <h3><i class="fas fa-info-circle"></i> Thông tin phòng</h3>
+                    <p><strong>Tên phòng:</strong> <span id="roomName">Đang tải...</span></p>
+                    <p><strong>Mã phòng:</strong> <span id="roomId">Đang tải...</span></p>
+                    <p><strong>Số người tham gia:</strong> <span id="participantCount">0</span></p>
+                    <p><strong>Link phòng:</strong></p>
+                    <div class="room-link" id="roomLink">Đang tải...</div>
+                    <div style="margin-top: 15px;">
+                        <button class="copy-btn" id="copyRoomLink">
+                            <i class="fas fa-copy"></i> Copy Link
+                        </button>
+                        <button class="copy-btn" id="shareRoom" style="margin-left: 10px;">
+                            <i class="fas fa-share"></i> Chia sẻ
+                        </button>
+                    </div>
+                </div>
+
+                <div class="file-transfer">
+                    <h3><i class="fas fa-cloud-upload-alt"></i> Chuyển file</h3>
+                    <div class="file-drop-zone" id="fileDropZone">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Kéo thả file vào đây hoặc nhấn để chọn</p>
+                        <small>Hỗ trợ tất cả các loại file</small>
+                    </div>
+                    <input type="file" id="fileInput" class="file-input" multiple>
+                    
+                    <div id="fileList" class="file-list" style="display: none;">
+                        <div id="fileListContent">
+                            <!-- Files will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="qr-display">
+                    <h3><i class="fas fa-qrcode"></i> Mã QR phòng</h3>
+                    <div id="qrContainer">
+                        <!-- QR code will be displayed here -->
+                    </div>
+                    <div class="qr-controls">
+                        <button class="copy-btn" id="copyQR">
+                            <i class="fas fa-copy"></i> Copy QR
+                        </button>
+                        <button class="download-btn" id="downloadQR">
+                            <i class="fas fa-download"></i> Tải QR
+                        </button>
+                    </div>
+                </div>
+
+                <div class="file-transfer">
+                    <h3><i class="fas fa-users"></i> Người tham gia</h3>
+                    <div id="participantsList">
+                        <!-- Participants will be displayed here -->
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="join-btn" id="leaveRoom">
+                        <i class="fas fa-sign-out-alt"></i> Rời phòng
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3><i class="fas fa-history"></i> Lịch sử chuyển file</h3>
+            <div id="fileHistory">
+                <p style="text-align: center; color: #666; font-style: italic;">
+                    Chưa có file nào được chuyển
+                </p>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p><i class="fas fa-shield-alt"></i> Bảo mật với WebRTC P2P</p>
+            <small>© 2025 Diệp Văn Tiến. Powered by QR-Code-Pro</small>
+        </footer>
+    </div>
+
+    <!-- File Transfer Modal -->
+    <div id="transferModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3><i class="fas fa-exchange-alt"></i> Đang chuyển file</h3>
+            <div id="transferProgress">
+                <!-- Transfer progress will be displayed here -->
+            </div>
+            <button id="cancelTransfer" class="remove-btn">
+                <i class="fas fa-times"></i> Hủy
+            </button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="lib/qrcode.min.js"></script>
+    <script src="lib/simple-peer.min.js"></script>
+    <script src="js/qr-generator.js"></script>
+    <script src="js/room.js"></script>
+    
+    <style>
+        /* Modal styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal-content h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Participant styles */
+        .participant {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .participant:last-child {
+            margin-bottom: 0;
+        }
+
+        .participant-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .participant-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #28a745;
+        }
+
+        .participant-status.offline {
+            background: #dc3545;
+        }
+
+        .participant-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .participant-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .participant-actions button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        /* File history styles */
+        .file-history-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .file-history-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .file-history-info {
+            flex: 1;
+        }
+
+        .file-history-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .file-history-details {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .file-history-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .file-history-status.completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .file-history-status.failed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .file-history-status.in-progress {
+            background: #fff3cd;
+            color: #856404;
+        }
+    </style>
+</body>
+</html>
