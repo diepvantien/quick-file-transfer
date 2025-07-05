@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receive File - Quick File Transfer</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="main-card">
+            <div class="header">
+                <button class="btn btn-back" onclick="goHome()">← Back</button>
+                <h1>Receive File</h1>
+                <p>Enter room code to download a file</p>
+            </div>
+            
+            <div class="receiver-content">
+                <!-- Step 1: Enter Room Code -->
+                <div class="step" id="code-step">
+                    <h2>Enter Room Code</h2>
+                    <div class="code-input-container">
+                        <input type="text" id="room-code-input" placeholder="Enter 6-digit code" maxlength="6">
+                        <button class="btn btn-primary" id="join-btn">Join Room</button>
+                    </div>
+                    <div class="divider">
+                        <span>or</span>
+                    </div>
+                    <div class="qr-scanner-info">
+                        <p>📱 Open your camera app and scan the QR code to automatically join</p>
+                    </div>
+                </div>
+                
+                <!-- Step 2: File Info -->
+                <div class="step" id="file-info-step" style="display: none;">
+                    <h2>File Information</h2>
+                    <div class="file-preview">
+                        <div class="file-icon" id="file-icon">📄</div>
+                        <div class="file-details">
+                            <div class="file-name" id="file-name"></div>
+                            <div class="file-size" id="file-size"></div>
+                            <div class="file-type" id="file-type"></div>
+                        </div>
+                    </div>
+                    <div class="download-actions">
+                        <button class="btn btn-primary" id="download-btn">
+                            <span>📥 Download File</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Download Progress -->
+                <div class="step" id="download-step" style="display: none;">
+                    <h2>Downloading...</h2>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="download-progress"></div>
+                        </div>
+                        <div class="progress-text" id="download-text">0%</div>
+                    </div>
+                    <div class="download-info">
+                        <p id="download-status">Preparing download...</p>
+                    </div>
+                </div>
+                
+                <!-- Step 4: Success -->
+                <div class="step" id="success-step" style="display: none;">
+                    <h2>✅ Download Complete!</h2>
+                    <div class="success-info">
+                        <p>File has been successfully downloaded to your device</p>
+                        <button class="btn btn-secondary" onclick="startOver()">Download Another File</button>
+                    </div>
+                </div>
+                
+                <!-- Error State -->
+                <div class="step error-step" id="error-step" style="display: none;">
+                    <h2>❌ Error</h2>
+                    <div class="error-info">
+                        <p id="error-message">Something went wrong</p>
+                        <button class="btn btn-secondary" onclick="startOver()">Try Again</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/receiver.js"></script>
+</body>
+</html>

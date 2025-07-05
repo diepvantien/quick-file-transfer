@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick File Transfer</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="main-card">
+            <div class="header">
+                <h1>Quick File Transfer</h1>
+                <p>Transfer files quickly between devices on the same WiFi network</p>
+            </div>
+            
+            <div class="role-selection">
+                <div class="role-card" id="sender-card">
+                    <div class="role-icon">📤</div>
+                    <h2>Send File</h2>
+                    <p>Upload a file and generate a QR code for others to download</p>
+                    <button class="btn btn-primary" onclick="goToSender()">Send File</button>
+                </div>
+                
+                <div class="role-card" id="receiver-card">
+                    <div class="role-icon">📥</div>
+                    <h2>Receive File</h2>
+                    <p>Scan QR code or enter room code to download a file</p>
+                    <button class="btn btn-secondary" onclick="goToReceiver()">Receive File</button>
+                </div>
+            </div>
+            
+            <div class="features">
+                <div class="feature">
+                    <span class="feature-icon">🔒</span>
+                    <span>Secure & Private</span>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">⚡</span>
+                    <span>Fast Transfer</span>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">📱</span>
+                    <span>Mobile Friendly</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
