@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send File - Quick File Transfer</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="main-card">
+            <div class="header">
+                <button class="btn btn-back" onclick="goHome()">← Back</button>
+                <h1>Send File</h1>
+                <p>Upload a file and share the QR code with others</p>
+            </div>
+            
+            <div class="sender-content">
+                <!-- Step 1: File Upload -->
+                <div class="step" id="upload-step">
+                    <h2>1. Choose File</h2>
+                    <div class="file-upload-area" id="file-upload">
+                        <div class="upload-icon">📁</div>
+                        <p>Drag and drop your file here</p>
+                        <p>or</p>
+                        <button class="btn btn-secondary" onclick="document.getElementById('file-input').click()">
+                            Choose File
+                        </button>
+                        <input type="file" id="file-input" style="display: none;" accept="*/*">
+                    </div>
+                    <div class="file-info" id="file-info" style="display: none;">
+                        <div class="file-details">
+                            <span class="file-name" id="file-name"></span>
+                            <span class="file-size" id="file-size"></span>
+                        </div>
+                        <button class="btn btn-primary" id="upload-btn">Upload File</button>
+                    </div>
+                </div>
+                
+                <!-- Step 2: QR Code -->
+                <div class="step" id="qr-step" style="display: none;">
+                    <h2>2. Share QR Code</h2>
+                    <div class="qr-container">
+                        <div class="qr-code" id="qr-code"></div>
+                        <div class="room-code">
+                            <p>Room Code:</p>
+                            <div class="code-display" id="room-code"></div>
+                        </div>
+                    </div>
+                    <div class="share-info">
+                        <p>Share this QR code or room code with others to let them download the file</p>
+                        <button class="btn btn-secondary" id="copy-link">Copy Link</button>
+                        <button class="btn btn-primary" id="show-status" onclick="showStep('status-step')" style="margin-left: 10px;">Show Status</button>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Status -->
+                <div class="step" id="status-step" style="display: none;">
+                    <h2>3. Transfer Status</h2>
+                    <div class="status-info">
+                        <div class="status-item">
+                            <span class="status-label">Connection:</span>
+                            <span class="status-value" id="connection-status">Waiting...</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Downloads:</span>
+                            <span class="status-value" id="download-count">0</span>
+                        </div>
+                    </div>
+                    <div class="progress-container" id="progress-container" style="display: none;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <div class="progress-text" id="progress-text">0%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/sender.js"></script>
+</body>
+</html>
